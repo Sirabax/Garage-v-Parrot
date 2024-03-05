@@ -48,34 +48,37 @@
 	</div>
 
 	<div class="container">
-		<div class="row">
-			{% for row in comments %}
-				<div class="col-4 comment_card">
-					<div class="card">
+    <div class="row">
+        {% for row in comments %}
+            {% if is_granted('ROLE_USER') or (not is_granted('ROLE_USER') and row.moderation == 1) %}
+                <div class="col-12 col-md-6 col-lg-4 comment_card">
+                    <div class="card">
 
-						{% if is_granted('ROLE_USER') %}
-							<div class="checkbox-container" style="position:absolute; top:10px; right:10px">
-								{% if row.moderation == 1 %}
-									<input type="checkbox" checked data-item-id="{{ row.id }}">
-								{% else %}
-									<input type="checkbox" data-item-id="{{ row.id }}">
-								{% endif %}
-							</div>
-						{% endif %}
+                        {% if is_granted('ROLE_USER') %}
+                            <div class="checkbox-container" style="position:absolute; top:10px; right:10px">
+                                {% if row.moderation == 1 %}
+                                    <input type="checkbox" checked data-item-id="{{ row.id }}">
+                                {% else %}
+                                    <input type="checkbox" data-item-id="{{ row.id }}">
+                                {% endif %}
+                            </div>
+                        {% endif %}
 
-						<div class="card-body py-3">
-							<h5 class="card-title">{{ row.name }}</h5>
-							<h6 class="mb-3 stars" data-rating="{{ row.rating }}"></h6>
-							<p class="card-text">{{ row.comment }}</p>
-						</div>
-						<div class="card-footer">
-							<small class="text-muted">{{ row.created|date('Y-m-d H:i:s') }}</small>
-						</div>
-					</div>
-				</div>
-			{% endfor %}
-		</div>
-	</div>
+                        <div class="card-body py-3">
+                            <h5 class="card-title">{{ row.name }}</h5>
+                            <h6 class="mb-3 stars" data-rating="{{ row.rating }}"></h6>
+                            <p class="card-text">{{ row.comment }}</p>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">{{ row.created|date('Y-m-d H:i:s') }}</small>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
 {% endblock %}
 
 {% block contentjs %}
